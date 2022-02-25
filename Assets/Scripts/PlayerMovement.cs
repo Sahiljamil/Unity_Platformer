@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,14 +12,13 @@ public class PlayerMovement : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        isGrounded = true;
     }
 
     private void Update()
     {
 
         float horizontalInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed,body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * speed,body.velocity.y);
 
         if (horizontalInput > 0.01f)
         {
@@ -31,13 +29,21 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.W) && isGrounded)
+        if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.UpArrow) && isGrounded)
         {
-            body.velocity = new Vector2(body.velocity.x, speed);
-            isGrounded = false;
+            Jump();
         }
 
         anim.SetBool("running", horizontalInput != 0);
+        anim.SetBool("isGrounded", isGrounded);
+    }
+
+    private void Jump()
+    {
+        body.velocity = new Vector2(body.velocity.x, speed);
+        anim.SetTrigger("jump");
+        isGrounded = false;
+
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -45,8 +51,11 @@ public class PlayerMovement : MonoBehaviour
         if (col.gameObject.tag == "ground")
         {
             isGrounded = true;
+
         }
     }
+
+   
 
 
 }
