@@ -12,26 +12,33 @@ public class PlayerMovement : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        ResetToStartingPostion();
     }
 
     private void Update()
     {
+        FixPlayerRoatation();
 
         float horizontalInput = Input.GetAxis("Horizontal");
         body.velocity = new Vector2(horizontalInput * speed,body.velocity.y);
 
         if (horizontalInput > 0.01f)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         }
         else if(horizontalInput < -0.01f)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-2.5f, 2.5f, 2.5f);
         }
 
         if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.UpArrow) && isGrounded)
         {
             Jump();
+        }
+
+        if (Input.GetKey("k"))
+        {
+            gameObject.GetComponent<Health>().TakeDamage(20);
         }
 
         anim.SetBool("running", horizontalInput != 0);
@@ -54,8 +61,20 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
+    public void ResetToStartingPostion()
+    {
+        gameObject.transform.position = new Vector3(0, 1, 0);
+    }
 
-   
+    public void FixPlayerRoatation()
+    {
+        float rotation = 0;
+
+        transform.localRotation = Quaternion.Euler(rotation, rotation, rotation);
+    }
+    
+
+
 
 
 }
