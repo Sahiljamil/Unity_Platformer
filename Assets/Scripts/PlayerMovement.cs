@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        FixPlayerRoatation();
 
         float horizontalInput = Input.GetAxis("Horizontal");
         body.velocity = new Vector2(Input.GetAxis("Horizontal") * speed,body.velocity.y);
@@ -46,6 +47,13 @@ public class PlayerMovement : MonoBehaviour
     public void ResetToStartingPostion()
     {
         gameObject.transform.position = new Vector3(0, 1, 0);
+    }
+
+    public void FixPlayerRoatation()
+    {
+        float rotation = 0;
+
+        transform.localRotation = Quaternion.Euler(rotation, rotation, rotation);
     }
     
 
