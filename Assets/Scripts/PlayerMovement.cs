@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     {
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        ResetToStartingPostion();
 
     }
 
@@ -22,11 +23,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (horizontalInput > 0.01f)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         }
         else if(horizontalInput < -0.01f)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-2.5f, 2.5f, 2.5f);
         }
 
         if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.W))
@@ -34,7 +35,17 @@ public class PlayerMovement : MonoBehaviour
             body.velocity = new Vector2(body.velocity.x, speed);
         }
 
+        if (Input.GetKey("k"))
+        {
+            gameObject.GetComponent<Health>().TakeDamage(20);
+        }
+
         anim.SetBool("running", horizontalInput != 0);
+    }
+
+    public void ResetToStartingPostion()
+    {
+        gameObject.transform.position = new Vector3(0, 1, 0);
     }
     
 
