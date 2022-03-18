@@ -18,22 +18,29 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         FixPlayerRoatation();
+        movement();
+        //anim.SetBool("isGrounded", isGrounded);
+    }
 
+    private void movement()
+    {
         float horizontalInput = Input.GetAxis("Horizontal");
-        body.velocity = new Vector2(horizontalInput * speed,body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
 
         if (horizontalInput > 0.01f)
         {
             transform.localScale = new Vector3(2.5f, 2.5f, 2.5f);
         }
-        else if(horizontalInput < -0.01f)
+        else if (horizontalInput < -0.01f)
         {
             transform.localScale = new Vector3(-2.5f, 2.5f, 2.5f);
         }
 
-        if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.UpArrow) && isGrounded)
+        if (Input.GetKey(KeyCode.Space) ^ Input.GetKey(KeyCode.UpArrow) ^ Input.GetKey(KeyCode.W) && isGrounded)
         {
-            Jump();
+            body.velocity = new Vector2(body.velocity.x, speed);
+            anim.SetTrigger("jump");
+            isGrounded = false;
         }
 
         if (Input.GetKey("k"))
@@ -42,25 +49,17 @@ public class PlayerMovement : MonoBehaviour
         }
 
         anim.SetBool("running", horizontalInput != 0);
-        anim.SetBool("isGrounded", isGrounded);
     }
 
-    private void Jump()
-    {
-        body.velocity = new Vector2(body.velocity.x, speed);
-        anim.SetTrigger("jump");
-        isGrounded = false;
-
-    }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "ground")
         {
             isGrounded = true;
-
         }
     }
+
     public void ResetToStartingPostion()
     {
         gameObject.transform.position = new Vector3(0, 1, 0);
@@ -72,9 +71,4 @@ public class PlayerMovement : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(rotation, rotation, rotation);
     }
-    
-
-
-
-
 }

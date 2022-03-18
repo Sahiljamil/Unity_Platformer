@@ -30,7 +30,7 @@ public class Health : MonoBehaviour
         if(gameObject.name == "Player 1")
         {
             gameObject.GetComponent<PlayerMovement>().ResetToStartingPostion();
-
+            gameObject.GetComponent<Scoring>().reset();
         }
         else
         {
